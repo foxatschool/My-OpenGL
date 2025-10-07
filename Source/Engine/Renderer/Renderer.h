@@ -3,6 +3,7 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_image/SDL_image.h>
 #include <iostream>
+#include <glad/glad.h>
 
 namespace neu {
 	/// <summary>
@@ -136,6 +137,8 @@ namespace neu {
 		/// </summary>
 		/// <returns>The height in pixels</returns>
 		int GetHeight() const { return m_height; }
+
+		SDL_GLContext m_context;
 
 	private:
 		// Allow Text and Texture classes to access the SDL renderer for their operations
