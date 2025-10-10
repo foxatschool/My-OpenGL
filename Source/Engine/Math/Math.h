@@ -29,7 +29,8 @@ namespace neu::math {
 	/// <param name="min">The inclusive lower bound of the range.</param>
 	/// <param name="max">The exclusive upper bound of the range.</param>
 	/// <returns>The wrapped integer value within the range [min, max).</returns>
-	constexpr int Wrap(int value, int min, int max) {
+	constexpr int Wrap(int value, int min, int max) 
+	{
 		int range = max - min;				// calculate range of wrap
 		int result = (value - min) % range; // shift value so range starts at 0
 		if (result < 0) result += range;	// wrap forward if result is negative (value < min)
@@ -44,7 +45,8 @@ namespace neu::math {
 	/// <param name="min">The inclusive lower bound of the range.</param>
 	/// <param name="max">The exclusive upper bound of the range.</param>
 	/// <returns>The wrapped value within the range [min, max).</returns>
-	inline float Wrap(float value, float min, float max) {
+	inline float Wrap(float value, float min, float max) 
+	{
 		float range = max - min;						// calculate range of wrap
 		float result = std::fmodf(value - min, range);	// shift value so range starts at 0
 		if (result < 0) result += range;				// wrap forward if result is negative (value < min)
@@ -59,8 +61,22 @@ namespace neu::math {
 	/// <param name="v">The value whose sign is to be determined.</param>
 	/// <returns>Returns -1 if the value is negative, 1 if positive, and 0 if zero.</returns>
 	template<typename T>
-	inline T Sign(T v) {
+	inline T Sign(T v) 
+	{
 		return (v < 0) ? (T)-1 : (v > 0) ? (T)1 : (T)0;
+	}
+
+	template<std::floating_point T> 
+	inline T Lerp(T min, T max, T t)
+	{
+		return min + (max - min) * t;
+	}
+
+	template<std::floating_point T>
+	inline T Remap(T min1, T max1, T min2, T max2, T v)
+	{
+		T t = (v - min1) / (max1 - min1);
+		return Lerp(min2, max2, t);
 	}
 
 	using std::min;
