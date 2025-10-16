@@ -10,12 +10,62 @@ int main(int argc, char* argv[]) {
     // initialize variables
  
     //--OpenGL
-    std::vector<neu::vec3> points = { {-0.5f, -0.5f, 0}, {0.5f, -0.5f, 0 }, {0.0f, 0.5f, 0} };
-    std::vector<neu::vec3> colors = { {1, 0, 0}, {0, 1, 0}, {0, 0, 1} };
+    /*std::vector<neu::vec3> points = { {-0.5f, -0.5f, 0}, {0.5f, -0.5f, 0 }, {0.0f, 0.5f, 0} };
+    std::vector<neu::vec3> colors = { {1, 0, 0},         {0, 1, 0},         {0, 0, 1} };
+	std::vector<neu::vec2> textcoord{ {0, 0},            {0.5f, 1.0f},      {1, 1} };*/
+
+    struct Vertex
+    {
+        neu::vec3 position;
+        neu::vec3 color;
+        neu::vec2 textcoord;
+    };
+
+    std::vector<Vertex> vertices
+    {
+        {{-0.5f, -0.5f, 0}, {0, 0, 1}, {0, 0}},
+        {{-0.5f, 0.5f, 0 }, {0, 0, 1}, {0, 1} },
+	    {{0.5f, 0.5f, 0},   {0, 0, 1}, {1, 1} },
+	    {{0.5f, -0.5f, 0},  {0, 0, 1}, {1, 0} }
+    };
+
+    std::vector<GLuint> indices{ 0, 1, 2, 2, 3, 0 };
+
+	//Vertex Buffer
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)* vertices.size(), vertices.data(), GL_STATIC_DRAW);
+
+	//Index Buffer
+	GLuint ibo;
+    glGenBuffers(1, &ibo);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices.size(), indices.data(), GL_STATIC_DRAW);
+
+    //Vertex Array
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, position));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, color));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, textcoord));
+
 	float angle = 0;
 
-    GLuint vbo[2];
-    glGenBuffers(1, vbo);
+    /*
+    GLuint vbo[3];
+    glGenBuffers(3, vbo);
 
 	//vertex buffer (position)
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
@@ -24,8 +74,14 @@ int main(int argc, char* argv[]) {
     //vertex buffer (Color)
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * colors.size(), colors.data(), GL_STATIC_DRAW);
+
+    //vertex buffer (Textcod)
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec2) * textcoord.size(), textcoord.data(), GL_STATIC_DRAW);
+
     
-    //vertex array
+    
+    //Vertex Array
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -40,54 +96,85 @@ int main(int argc, char* argv[]) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
-    //vertex shader
-    std::string vsSource;
-	neu::file::ReadTextFile("Shaders/Basic.vert", vsSource);
-    const char* vsCstr = vsSource.c_str();
-    GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vs, 1, &vsCstr, NULL);
-	glCompileShader(vs);
+    //Textcoord
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+    */
 
-    // fragment shader
-	std::string fsSource;
-	neu::file::ReadTextFile("Shaders/Basic.frag", fsSource);
-	const char* fsCstr = fsSource.c_str();
-	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fs, 1, &fsCstr, NULL);
-	glCompileShader(fs);
+ //   //vertex shader
+ //   std::string vsSource;
+	//neu::file::ReadTextFile("Shaders/Basic.vert", vsSource);
+ //   const char* vsCstr = vsSource.c_str();
+ //   GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+ //   glShaderSource(vs, 1, &vsCstr, NULL);
+	//glCompileShader(vs);
 
-    int success;
-    glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        std::string infoLog(512, '\0');  // pre-allocate space
-        GLsizei length;
-        glGetShaderInfoLog(fs, (GLsizei)infoLog.size(), &length, &infoLog[0]);
-        infoLog.resize(length);
+ //   // fragment shader
+	//std::string fsSource;
+	//neu::file::ReadTextFile("Shaders/Basic.frag", fsSource);
+	//const char* fsCstr = fsSource.c_str();
+	//GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+	//glShaderSource(fs, 1, &fsCstr, NULL);
+	//glCompileShader(fs);
 
-        LOG_WARNING("Shader compilation failed: {}", infoLog);
-    }
 
-	GLuint shProgram = glCreateProgram();
-	glAttachShader(shProgram, vs);
-	glAttachShader(shProgram, fs);
-	glLinkProgram(shProgram);
-	glUseProgram(shProgram);
+
+ //   int success;
+ //   glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
+ //   if (!success)
+ //   {
+ //       std::string infoLog(512, '\0');  // pre-allocate space
+ //       GLsizei length;
+ //       glGetShaderInfoLog(fs, (GLsizei)infoLog.size(), &length, &infoLog[0]);
+ //       infoLog.resize(length);
+
+ //       LOG_WARNING("Shader compilation failed: {}", infoLog);
+ //   }
+
+    // Shaders
+    auto vs = neu::Resources().Get<neu::Shader>("shaders/basic.vert", GL_VERTEX_SHADER);
+    auto fs = neu::Resources().Get<neu::Shader>("shaders/basic.frag", GL_FRAGMENT_SHADER);
+
+	//GLuint shProgram = glCreateProgram();
+	//glAttachShader(shProgram, vs->m_shader);
+	//glAttachShader(shProgram, fs->m_shader);
+	//glLinkProgram(shProgram);
+ //   GLint success;
+ //   glGetProgramiv(shProgram, GL_LINK_STATUS, &success);
+ //   if (!success)
+ //   {
+ //       std::string infoLog(512, '\0');  // pre-allocate space
+ //       GLsizei length;
+ //       glGetProgramInfoLog(shProgram, (GLsizei)infoLog.size(), &length, &infoLog[0]);
+ //       infoLog.resize(length);
+
+ //       LOG_WARNING("Shader compilation failed: {}", infoLog);
+ //   }
+
+ //   glUseProgram(shProgram);
+
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+
+    auto program = std::make_shared<neu::Program>();
+    program->AttachShader(vs);
+    program->AttachShader(fs);
+    program->Link();
+    program->Use();
+    program->SetUniform("u_model", model);
+
+    neu::res_t<neu::Texture> texture = neu::Resources().Get<neu::Texture>("textures/beast.png");
 
     // uniform
-    GLint uniform = glGetUniformLocation(shProgram, "u_time");
-    ASSERT(uniform != -1);
+   // GLint uniform = glGetUniformLocation(shProgram, "u_time");
+ //   ASSERT(uniform != -1);
 
-    glGetProgramiv(shProgram, GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        std::string infoLog(512, '\0');  // pre-allocate space
-        GLsizei length;
-        glGetProgramInfoLog(shProgram, (GLsizei)infoLog.size(), &length, &infoLog[0]);
-        infoLog.resize(length);
+	//GLint tex_uniform = glGetUniformLocation(shProgram, "u_texture");
+    //glUniform1i(tex_uniform, 0);
 
-        LOG_WARNING("Shader compilation failed: {}", infoLog);
-    }
 
 
     // initialize scene
@@ -108,7 +195,7 @@ int main(int argc, char* argv[]) {
 
         if (neu::GetEngine().GetInput().GetKeyPressed(SDL_SCANCODE_ESCAPE)) quit = true;
 
-        glUniform1f(uniform, neu::GetEngine().GetTime().GetTime());
+        //glUniform1f(uniform, neu::GetEngine().GetTime().GetTime());
 
         
 		//// update the triangle scale based on input
@@ -140,32 +227,18 @@ int main(int argc, char* argv[]) {
   //          angle -= 0.1f;
   //      }
 
+        
+
+
+
+
 
         // draw
-        
-        //neu::vec3 color{ 0, 0, 0 };
-        //neu::GetEngine().GetRenderer().SetColor(color.r, color.g, color.b);
         neu::GetEngine().GetRenderer().Clear();
         
 		glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, (GLsizei)points.size());
-
-        /*
-		glLoadIdentity();
-        glPushMatrix();
-
-		glTranslatef(position.x, position.y, 0);
-		glRotatef(angle, 0, 0, 1);
-
-		// Create a simple triangle using 3 points and colors you define
-        glBegin(GL_TRIANGLES);
-        for (int i = 0; i < points.size(); i++)
-        {
-            glColor3f(colors[i].r, colors[i].g, colors[i].b);
-            glVertex3f(points[i].x, points[i].y, points[i].z);
-		}
-        glEnd();
-        */
+        //glDrawArrays(GL_TRIANGLES, 0, (GLsizei)points.size());
+        glDrawElements(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, 0);
 
         neu::GetEngine().GetRenderer().Present();
     }
