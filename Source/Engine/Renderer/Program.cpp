@@ -3,19 +3,23 @@
 
 namespace neu
 {
-	Program::Program() {
+	Program::Program() 
+	{
 		m_program = glCreateProgram();
 	}
 
-	Program::~Program() {
+	Program::~Program() 
+	{
 		if (m_program) glDeleteProgram(m_program);
 	}
 
-	void Program::AttachShader(const res_t<Shader>& shader) {
+	void Program::AttachShader(const res_t<Shader>& shader) 
+	{
 		glAttachShader(m_program, shader->m_shader);
 	}
 
-	bool Program::Link() {
+	bool Program::Link() 
+	{
 		glLinkProgram(m_program);
 
 		GLint success = false;
