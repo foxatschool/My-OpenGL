@@ -14,6 +14,12 @@
     <Filter Include="Assets\Textures">
       <UniqueIdentifier>{b3889b5c-54a0-43de-b07d-1187d4a0f0e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Materials">
+      <UniqueIdentifier>{080f8c16-038b-4b70-a9ff-6b10937a0d27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Scenes">
+      <UniqueIdentifier>{6df9e50d-3903-4547-a1e7-184d5df49a50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -34,6 +40,30 @@
     </None>
     <None Include="..\..\Build\Assets\Shaders\Basic.vert">
       <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\Basic_lit.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\basic_lit.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\basic_lit.prog">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Materials\spot.mat">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\Basic_phong.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\basic_phong.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\basic_phong.prog">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Scenes\scene01.json">
+      <Filter>Assets\Scenes</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

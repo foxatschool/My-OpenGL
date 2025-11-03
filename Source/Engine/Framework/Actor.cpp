@@ -24,7 +24,8 @@ namespace neu {
 	{
 		// Deep copy all components from the source actor
 		// Each component must be cloned individually to avoid shared ownership
-		for (auto& component : other.m_components) {
+		for (auto& component : other.m_components) 
+		{
 			// Clone the component using its virtual Clone() method
 			// dynamic_cast ensures we get a Component pointer
 			// release() transfers ownership from the returned unique_ptr
@@ -43,7 +44,8 @@ namespace neu {
 	/// This ensures all actors exist before any initialization code runs, allowing
 	/// components to safely query the scene for other actors during startup.
 	/// </summary>
-	bool Actor::Start() {
+	bool Actor::Start() 
+	{
 		// Initialize all components attached to this actor
 		// Components may set up references, load resources, or initialize state
 		for (auto& component : m_components) {
@@ -61,7 +63,8 @@ namespace neu {
 	/// a chance to release resources, unregister from systems, or perform
 	/// final cleanup operations before memory is freed.
 	/// </summary>
-	void Actor::Destroyed() {
+	void Actor::Destroyed() 
+	{
 		// Notify each component of impending destruction
 		// Components should release any resources they're holding
 		for (auto& component : m_components) {
@@ -84,12 +87,14 @@ namespace neu {
 
 		// Automatic lifespan management
 		// When lifespan reaches zero, actor marks itself for destruction
-		if (lifespan > 0) {
+		if (lifespan > 0) 
+		{
 			// Decrement remaining lifetime
 			lifespan -= dt;
 
 			// Check if lifespan has expired
-			if (lifespan <= 0) {
+			if (lifespan <= 0) 
+			{
 				// Mark for destruction - Scene will remove on next update
 				destroyed = true;
 				return; // Skip component updates for destroyed actor
@@ -119,7 +124,8 @@ namespace neu {
 		if (destroyed) return;
 
 		// Iterate through all components looking for renderable ones
-		for (auto& component : m_components) {
+		for (auto& component : m_components) 
+		{
 			// Only process active components
 			if (component->active) {
 				// Attempt to cast to RendererComponent
@@ -130,6 +136,25 @@ namespace neu {
 				if (rendererComponent) {
 					rendererComponent->Draw(renderer);
 				}
+			}
+		}
+	}
+
+	void Actor::UpdateGui()
+	{
+		ImGui::Text("Name: %s", name.c_str());
+		ImGui::Text("Tag: %s", tag.c_str());
+		ImGui::Checkbox("Active", &active);
+		// transform information
+		ImGui::Separator();
+		transform.UpdateGui();
+
+		for (auto& component : m_components)
+		{
+			ImGui::Separator();
+
+			if (ImGui::CollapsingHeader(component->GetClassName(), ImGuiTreeNodeFlags_DefaultOpen)) {
+				component->UpdateGui();
 			}
 		}
 	}
@@ -160,7 +185,8 @@ namespace neu {
 	/// serialized data. Integrates with Factory system for type-safe
 	/// component creation.
 	/// </summary>
-	void Actor::Read(const serial_data_t& value) {
+	void Actor::Read(const serial_data_t& value) 
+	{
 		// Load base Object properties first (name, active state)
 		Object::Read(value);
 
@@ -177,14 +203,17 @@ namespace neu {
 
 		// SECTION: Load and create components
 		// Components are defined in a "components" array in the data
-		if (SERIAL_CONTAINS(value, components)) {
+		if (SERIAL_CONTAINS(value, components)) 
+		{
 			// Iterate through each component definition
-			for (auto& componentValue : SERIAL_AT(value, components).GetArray()) {
+			for (auto& componentValue : SERIAL_AT(value, components).GetArray()) 
+			{
 
 				// Extract the component type string
 				// Type is required to know which component class to instantiate
 				std::string type;
-				if (!SERIAL_READ(componentValue, type)) {
+				if (!SERIAL_READ(componentValue, type)) 
+				{
 					// Log warning but continue processing other components
 					LOG_WARNING("Component missing type in actor '{}'", name);
 					continue; // Skip this malformed component
@@ -193,7 +222,8 @@ namespace neu {
 				// Use Factory to create component instance from type string
 				// Factory handles type-safe component creation
 				auto component = Factory::Instance().Create<Component>(type);
-				if (!component) {
+				if (!component) 
+				{
 					// Component type not registered or creation failed
 					LOG_ERROR("Failed to create component of type '{}' for actor '{}'", type, name);
 					continue; // Skip this component

@@ -54,7 +54,7 @@ namespace neu {
     /// }
     /// ```
     /// </summary>
-    class Scene : public Object {
+    class Scene : public ISerializable, public GUI {
     public:
         /// <summary>
         /// Constructs a scene with a reference to the parent game instance.
@@ -72,11 +72,11 @@ namespace neu {
 
         // Override from Object base class
         // Initializes all actors after scene is fully loaded
-        bool Start() override;
+        bool Start();
 
         // Override from Object base class
         // Cleans up all actors before scene destruction
-        void Destroyed() override;
+        void Destroyed();
 
         /// <summary>
         /// Loads a complete scene from a named configuration file.
@@ -134,7 +134,8 @@ namespace neu {
         /// <param name="dt">Time elapsed since the last frame update, in seconds</param>
         void Update(float dt);
 
-        /// <summary>
+        void UpdateGui() override;
+
         /// Renders all active actors in the scene using the provided renderer.
         /// 
         /// This method coordinates the rendering of all visible actors, providing
@@ -282,6 +283,7 @@ namespace neu {
         std::vector<T*> GetActorsByTag(const std::string& tag);
 
     private:
+		friend class Editor;
 
         /// <summary>
         /// Container for all actors in the scene.
@@ -307,6 +309,7 @@ namespace neu {
     // TEMPLATE IMPLEMENTATIONS
     // These must be in the header because templates are instantiated at compile time
     // ============================================================================
+    glm::vec3 m_ambintLight;
 
     /// <summary>
     /// Template implementation for retrieving actors by type.

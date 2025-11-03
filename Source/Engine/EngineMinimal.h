@@ -48,9 +48,20 @@
 #include "Renderer/Program.h"
 #include "Renderer/VertexBuffer.h"
 #include "Renderer/Model.h"
+#include "Renderer/Material.h"
 
 // physics
 #include "Physics/Collidable.h"
+
+//Components
+#include "Components/ModelRender.h"
+#include "Components/CameraComponent.h"
+#include "Components/LightComponent.h"
+#include "Components/FirstPersonController.h"
+
+// gui
+#include "GUI/GUI.h"
+#include "GUI/Editor.h"
 
 // third-party library
 #include <fmod.hpp>
@@ -70,6 +81,7 @@
 #include <vector>
 #include <map>
 #include <list>
+#include <set>
 #include <cstdlib>
 #include <random>
 #include <algorithm>
