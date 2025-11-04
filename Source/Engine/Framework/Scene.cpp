@@ -85,14 +85,17 @@ namespace neu {
     void Scene::Draw(Renderer& renderer) 
     {
         //Get Light
-        LightComponent* light = nullptr;
+        std::vector<LightComponent*> lights;
 
         for (auto& actor : m_actors)
         {
             if (!actor->active) continue;
 
-            light = actor->GetComponent<LightComponent>();
-            if (light && light->active)break;
+            auto light = actor->GetComponent<LightComponent>();
+            if (light && light->active)
+            {
+				lights.push_back(light);
+            }
         }   
 
         //Get Camera
@@ -103,7 +106,7 @@ namespace neu {
             if (!actor->active) continue;
 
             camera = actor->GetComponent<CameraComponent>();
-            if (light && light->active)break;
+            if (camera && camera->active)break;
         }
 
         if (!camera)
@@ -129,11 +132,24 @@ namespace neu {
         {
             program->Use();
             program->SetUniform("u_ambientLight", m_ambintLight);
+            program->SetUniform("u_numLights", (int)lights.size());
             camera->SetProgram(*program);
-            if (light)
+
+			//Set Lights
+			//int index = 0;
+    //        for (auto light : lights)
+    //        {
+				//std::string lightName = "u_lights[" + std::to_string(index++) + "]";
+    //            light->SetProgram(*program, lightName, camera->view);
+
+    //        }
+            for (int i = 0; i < lights.size(); i++)
             {
-                light->SetProgram(*program, "u_light", camera->view);
-            }
+                std::string lightName = "u_lights[" + std::to_string(i) + "]";
+				lights[i]->SetProgram(*program, lightName, camera->view);
+			}
+            
+
         }
         
         // Iterate through all actors in the scene

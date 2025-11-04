@@ -11,14 +11,21 @@ namespace neu
 		glm::vec3 position = glm::vec3{ view * glm::vec4{ owner->transform.position, 1} };
 
 		program.SetUniform(name + ".color", color);
+		program.SetUniform(name + ".intensity", intensity);
+		program.SetUniform(name + ".range", range);
 		program.SetUniform(name + ".position", owner->transform.position);
 	}
 	void LightComponent::Read(const serial_data_t& value)
 	{
+		SERIAL_READ(value, color);
+		SERIAL_READ(value, intensity);
+		SERIAL_READ(value, range);
 	}
 	void LightComponent::UpdateGui()
 	{
 		ImGui::ColorEdit3("Color", glm::value_ptr(color));
+		ImGui::DragFloat("Intensity", &intensity, 0.1f, 0.0f, 100.0f);
+		ImGui::DragFloat("Range", &range, 0.1f, 0.0f);
 	}
 
 }
