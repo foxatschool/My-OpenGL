@@ -40,8 +40,8 @@ namespace neu {
 		friend class Renderer;
 
 		GLuint m_texture = 0;
-	private:
 		GLenum m_target = GL_TEXTURE_2D;
+	private:
 		// Pointer to the underlying SDL texture object stored in GPU memory
 		// Initialized to nullptr and managed throughout the texture's lifetime
 

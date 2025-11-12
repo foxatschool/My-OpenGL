@@ -134,9 +134,6 @@
     <ClCompile Include="Renderer\Material.cpp">
       <Filter>Source\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Components\ModelRender.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Components\LightComponent.cpp">
       <Filter>Source\Components</Filter>
     </ClCompile>
@@ -148,6 +145,12 @@
     </ClCompile>
     <ClCompile Include="GUI\Editor.cpp">
       <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Cubemap.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\ModelRender.cpp">
+      <Filter>Source\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +294,9 @@
     </ClInclude>
     <ClInclude Include="GUI\Editor.h">
       <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Cubemap.h">
+      <Filter>Source\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

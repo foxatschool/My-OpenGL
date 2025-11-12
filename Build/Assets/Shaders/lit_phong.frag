@@ -8,12 +8,14 @@
 #define BASE_MAP			(1 << 0)
 #define SPECULAR_MAP		(1 << 1)
 #define EMISSIVE_MAP		(1 << 2)
+#define NORMAL_MAP			(1 << 3)
 
 in VS_OUT
 {
 	vec2 texcoord;
 	vec3 position;
 	vec3 normal;
+	mat3 tbn;
 } fs_in;
 
 uniform int u_numLights = 3;
@@ -39,6 +41,7 @@ uniform struct Material
 uniform sampler2D u_baseMap;
 uniform sampler2D u_specularMap;
 uniform sampler2D u_emissiveMap;
+uniform sampler2D u_normalMap;
 
 uniform struct Light
 {
@@ -59,7 +62,7 @@ float calculateAttenuation(in float lightDistance, in float range)
 	return attenuation * attenuation;
 }
 
-	vec3 calculateLight(in Light light, in vec3 mv_position, in vec3 normal)
+	vec3 calculateLight(in Light light, in vec3 mv_position, in vec3 normal, in float specularMask)
 {
 	float attenuation = 1.0;
 	float lightDistance;
@@ -110,26 +113,45 @@ float calculateAttenuation(in float lightDistance, in float range)
 	vec3 halfwayDir = normalize(light_dir + view_dir);
 	float NdotH = max(dot(normal, halfwayDir), 0.0);
 	NdotH = pow(NdotH, u_material.shininess);
-	vec3 specular = vec3(NdotH);
+	vec3 specular = vec3(NdotH) * specularMask;
 	
 
 	return (diffuse + specular) * light.intensity * attenuation;
+}
+
+vec3 calculateNormal()
+{
+	// generate the normals from the normal map
+	vec3 normal = texture(u_normalMap, fs_in.texcoord).rgb;
+	// convert rgb normal (0 <-> 1) to xyx (-1 <-> 1)
+	normal = normalize((normal * 2)-1);
+	// transform normals to model view space
+	normal = normalize(fs_in.tbn * normal);
+
+	return normal;
 }
 
 
 void main()
 {
 
-	//float specularMask = 
+	float specularMask = ((u_material.parameters & SPECULAR_MAP) != 0u)
+	? texture(u_specularMap, fs_in.texcoord).r
+	: 1;
+
+	vec3 normal = ((u_material.parameters & NORMAL_MAP) != 0u)
+	? calculateNormal()
+	: fs_in.normal;
+
+	vec3 color = u_ambientLight;
+	for (int i = 0; i < u_numLights; i++)
+	{
+		color += calculateLight(u_lights[i], fs_in.position, normal, specularMask);
+	}
+
 	vec4 emissive = ((u_material.parameters & EMISSIVE_MAP) != 0u) 
 	? texture(u_emissiveMap, fs_in.texcoord) * vec4(u_material.emissiveColor, 1)
 	: vec4(u_material.emissiveColor, 1);
-
-	vec3 color = u_ambientLight;
-	for(int i = 0; i < u_numLights; i++)
-	{
-		color += calculateLight(u_lights[i], fs_in.position, fs_in.normal);
-	}
 
 	f_color = texture(u_baseMap, fs_in.texcoord) * vec4(color, 1);
 	//f_color = vec4(v_normal, 1);

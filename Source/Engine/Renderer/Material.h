@@ -16,15 +16,22 @@ namespace neu
 			None			=0,
 			BaseMap			=(1 << 0),
 			SpecularMap		= (1 << 1),
-			EmissiveMap		= (1 << 2)
+			EmissiveMap		= (1 << 2),
+			NormalMap		= (1 << 3),
+			Cubemap			= (1 << 0)
 		};
 
+		
 	public:
 		Material() = default;
 		~Material() = default;
 
 		bool Load(const std::string& filename);
 		void Bind();
+
+		// Inherited via GUI
+		void UpdateGui() override;
+
 	public:
 
 		res_t<Texture> baseMap;
@@ -32,16 +39,16 @@ namespace neu
 		glm::vec3 baseColor{ 1,1,1 };
 		res_t<Texture> specularMap;
 		res_t<Texture> emissiveMap;
+		res_t<Texture> normalMap;
+		res_t<Cubemap> cubeMap;
 		glm::vec3 emissiveColor{0,0,0};
 
 		float shininess{ 2 };
 		glm::vec2 tiling{ 1,1 };
 		glm::vec2 offset{ 0,0 };
-		Parameters parameters;
+		Parameters parameters = Parameters::None;
 
 
-		// Inherited via GUI
-		void UpdateGui() override;
 
 	};
 }
