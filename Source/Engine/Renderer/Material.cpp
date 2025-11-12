@@ -27,8 +27,13 @@ namespace neu
 		SERIAL_READ_NAME(document, "specularMap", textureName);
 		if (!textureName.empty()) specularMap = Resources().Get<Texture>(textureName);
 
+		textureName = "";
+		SERIAL_READ_NAME(document, "emissiveMap", textureName);
+		if (!textureName.empty()) specularMap = Resources().Get<Texture>(textureName);
+
 
 		SERIAL_READ(document, baseColor);
+		SERIAL_READ(document, emissiveColor);
 
 		SERIAL_READ(document, shininess);
 		SERIAL_READ(document, tiling);
@@ -38,23 +43,39 @@ namespace neu
 	}
 	void Material::Bind()
 	{
+		parameters = Parameters::None;
+
 		program->Use();
 		if (baseMap)
 		{
 			baseMap->SetActive(GL_TEXTURE0);
 			baseMap->Bind();
+			program->SetUniform("u_baseMap", 0);
+			parameters = (Parameters)((uint32_t)parameters | (uint32_t)Parameters::BaseMap);
 		}
 
 		if (specularMap)
 		{
 			specularMap->SetActive(GL_TEXTURE1);
 			specularMap->Bind();
+			program->SetUniform("u_specularMap", 1);
+			parameters = (Parameters)((uint32_t)parameters | (uint32_t)Parameters::SpecularMap);
+		}
+
+		if (emissiveMap)
+		{
+			emissiveMap->SetActive(GL_TEXTURE1);
+			emissiveMap->Bind();
+			program->SetUniform("u_emissiveMap", 2);
+			parameters = (Parameters)((uint32_t)parameters | (uint32_t)Parameters::EmissiveMap);
 		}
 
 		program->SetUniform("u_material.baseColor", baseColor);
+		program->SetUniform("u_material.emissiveColor", emissiveColor);
 		program->SetUniform("u_material.shininess", shininess);
 		program->SetUniform("u_material.tiling", tiling);
 		program->SetUniform("u_material.offset", offset);
+		program->SetUniform("u_material.parameters", (uint32_t)parameters);
 	}
 	void Material::UpdateGui()
 	{
@@ -64,6 +85,11 @@ namespace neu
 			ImGui::Text("Shader: %s", program->name.c_str());
 			if (baseMap) ImGui::Text("Base Map: %s", baseMap->name.c_str());
 			ImGui::ColorEdit3("Base Color", glm::value_ptr(baseColor));
+
+			if (specularMap) ImGui::Text("Base Map: %s", specularMap->name.c_str());
+			if (emissiveMap) ImGui::Text("Base Map: %s", emissiveMap->name.c_str());
+			ImGui::ColorEdit3("Emissive Color", glm::value_ptr(emissiveColor));
+
 			ImGui::DragFloat("Shininess", &shininess, 1.0f, 2.0f, 256.0f);
 			ImGui::DragFloat2("Tiling", glm::value_ptr(tiling), 0.1f);
 			ImGui::DragFloat2("Offset", glm::value_ptr(offset), 0.1f);

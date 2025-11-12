@@ -285,6 +285,7 @@ namespace neu {
     private:
 		friend class Editor;
 
+        glm::vec3 m_ambientLight;
         /// <summary>
         /// Container for all actors in the scene.
         /// 
@@ -309,7 +310,6 @@ namespace neu {
     // TEMPLATE IMPLEMENTATIONS
     // These must be in the header because templates are instantiated at compile time
     // ============================================================================
-    glm::vec3 m_ambintLight;
 
     /// <summary>
     /// Template implementation for retrieving actors by type.

@@ -1,7 +1,7 @@
 {
   "actors": [
     {
-      "name": "Spot",
+      "name": "Candles",
       "persistent": true,
       "transform": {
         "position": [ 0, 0, 10 ],
@@ -11,11 +11,76 @@
       "components": [
         {
           "type": "ModelRender",
-          "texture_name": "models/spot.obj",
+          "model": "models/Halloween01/White_Candles_Big.fbx",
           "material": "materials/spot.mat"
         }
       ]
     },
+    {
+      "name": "Grave",
+      "persistent": true,
+      "transform": {
+        "position": [ 0, 0, 10 ],
+        "rotation": [ 0, 180, 0 ],
+        "scale": [ 2, 2, 2 ]
+      },
+      "components": [
+        {
+          "type": "ModelRender",
+          "model": "models/Halloween01/Gravestone_Plain.fbx",
+          "material": "materials/spot.mat"
+        }
+      ]
+    },
+    {
+      "name": "Skull",
+      "persistent": true,
+      "transform": {
+        "position": [ 0, 0, 10 ],
+        "rotation": [ 0, 180, 0 ],
+        "scale": [ 2, 2, 2 ]
+      },
+      "components": [
+        {
+          "type": "ModelRender",
+          "model": "models/Halloween01/Skull_Jaw.fbx",
+          "material": "materials/spot.mat"
+        }
+      ]
+    },
+    {
+      "name": "Pumpkin",
+      "persistent": true,
+      "transform": {
+        "position": [ 0, 0, 10 ],
+        "rotation": [ 0, 180, 0 ],
+        "scale": [ 2, 2, 2 ]
+      },
+      "components": [
+        {
+          "type": "ModelRender",
+          "model": "models/Halloween01/Pumpkin.fbx",
+          "material": "materials/spot.mat"
+        }
+      ]
+    },
+    {
+      "name": "Scythe",
+      "persistent": true,
+      "transform": {
+        "position": [ 0, 0, 10 ],
+        "rotation": [ 0, 180, 0 ],
+        "scale": [ 2, 2, 2 ]
+      },
+      "components": [
+        {
+          "type": "ModelRender",
+          "model": "models/Halloween01/Scythe.fbx",
+          "material": "materials/spot.mat"
+        }
+      ]
+    },
+
     {
       "name": "camera",
       "persistent": true,

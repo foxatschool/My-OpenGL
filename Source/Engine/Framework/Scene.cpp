@@ -57,7 +57,7 @@ namespace neu {
 
     void Scene::UpdateGui()
     {
-        ImGui::ColorEdit3("Ambient", glm::value_ptr(m_ambintLight));
+        ImGui::ColorEdit3("Ambient", glm::value_ptr(m_ambientLight));
     }
 
     /// <summary>
@@ -131,7 +131,7 @@ namespace neu {
         for (auto& program : programs)
         {
             program->Use();
-            program->SetUniform("u_ambientLight", m_ambintLight);
+            program->SetUniform("u_ambientLight", m_ambientLight);
             program->SetUniform("u_numLights", (int)lights.size());
             camera->SetProgram(*program);
 

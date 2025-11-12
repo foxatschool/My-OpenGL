@@ -7,7 +7,7 @@ in VS_OUT
 } fs_in;
 
 out vec4 f_color;
-uniform sampler2D u_texture;
+uniform sampler2D u_time;
 
 uniform struct Material
 {
