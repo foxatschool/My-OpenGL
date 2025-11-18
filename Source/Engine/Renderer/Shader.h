@@ -12,7 +12,9 @@ namespace neu
 
 	public:
 		GLuint m_shader = 0;
+		void UpdateGui() override {};
 	};
+
 }
 
 

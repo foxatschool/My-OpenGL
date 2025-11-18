@@ -139,6 +139,8 @@ void main()
 	? texture(u_specularMap, fs_in.texcoord).r
 	: 1;
 
+	//specularMask = 1.0;
+
 	vec3 normal = ((u_material.parameters & NORMAL_MAP) != 0u)
 	? calculateNormal()
 	: fs_in.normal;
@@ -153,6 +155,5 @@ void main()
 	? texture(u_emissiveMap, fs_in.texcoord) * vec4(u_material.emissiveColor, 1)
 	: vec4(u_material.emissiveColor, 1);
 
-	f_color = texture(u_baseMap, fs_in.texcoord) * vec4(color, 1);
-	//f_color = vec4(v_normal, 1);
+	f_color = texture(u_baseMap, fs_in.texcoord) * vec4(color, 1) + emissive;
 }

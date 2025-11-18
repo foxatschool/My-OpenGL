@@ -34,6 +34,20 @@ namespace neu
 		}
 		ImGui::End();
 
+		ImGui::Begin("Assets");
+		auto resources = Resources().GetByType();
+		index = 0;
+		for (auto resource : resources) {
+			ImGui::PushID(index++);
+			if (ImGui::Selectable(resource->name.c_str(), resource == m_selected))
+			{
+				m_selected = resource;
+			}
+			ImGui::PopID();
+		}
+
+		ImGui::End();
+
 		// INSPECTOR
 		ImGui::Begin("Inspector");
 		if(m_selected)
@@ -44,5 +58,9 @@ namespace neu
 
 		ImGui::PopStyleColor();
 
+	}
+	void Editor::ShowTexture(const Texture texture, float width, float height)
+	{
+		ImGui::Image((ImTextureID)texture.m_texture, ImVec2(width, height));
 	}
 }

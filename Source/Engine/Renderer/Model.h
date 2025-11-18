@@ -26,5 +26,7 @@ namespace neu
 		void ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	private:
 		std::vector<res_t<VertexBuffer>> m_vertexBuffers;
+
+		void UpdateGui() override {};
 	};
 }

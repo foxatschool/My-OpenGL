@@ -82,16 +82,16 @@ namespace neu
 		{
 			normalMap->SetActive(GL_TEXTURE3);
 			normalMap->Bind();
-			program->SetUniform("u_normalMap", 2);
-			parameters = (Parameters)((uint32_t)parameters | (uint32_t)Parameters::EmissiveMap);
+			program->SetUniform("u_normalMap", 3);
+			parameters = (Parameters)((uint32_t)parameters | (uint32_t)Parameters::NormalMap);
 		}
 
 		if (cubeMap)
 		{
 			cubeMap->SetActive(GL_TEXTURE4);
 			cubeMap->Bind();
-			program->SetUniform("u_normalMap", 2);
-			parameters = (Parameters)((uint32_t)parameters | (uint32_t)Parameters::EmissiveMap);
+			program->SetUniform("u_cubeMap", 4);
+			parameters = (Parameters)((uint32_t)parameters | (uint32_t)Parameters::CubeMap);
 		}
 
 		program->SetUniform("u_material.baseColor", baseColor);
@@ -100,6 +100,9 @@ namespace neu
 		program->SetUniform("u_material.tiling", tiling);
 		program->SetUniform("u_material.offset", offset);
 		program->SetUniform("u_material.parameters", (uint32_t)parameters);
+
+
+		program->SetUniform("u_ior", ior);
 	}
 	void Material::UpdateGui()
 	{
@@ -107,11 +110,32 @@ namespace neu
 		{
 			ImGui::Text("Name: %s", name.c_str());
 			ImGui::Text("Shader: %s", program->name.c_str());
-			if (baseMap) ImGui::Text("Base Map: %s", baseMap->name.c_str());
+
+			ImGui::Separator();
+			if (baseMap)
+			{
+				ImGui::Text("Base Map: %s", baseMap->name.c_str());
+				Editor::ShowTexture(*baseMap, 32, 32);
+				Editor::GetDialogResource<Texture>(baseMap, "BaseMapDialog", "Open texture", "Image (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.pnj,.jpg,.jpeg,.bmp,.tga},.*");
+			}
 			ImGui::ColorEdit3("Base Color", glm::value_ptr(baseColor));
 
-			if (specularMap) ImGui::Text("Base Map: %s", specularMap->name.c_str());
-			if (emissiveMap) ImGui::Text("Base Map: %s", emissiveMap->name.c_str());
+			if (specularMap)
+			{
+				ImGui::Text("Base Map: %s", specularMap->name.c_str());
+				Editor::ShowTexture(*specularMap, 32, 32);
+				Editor::GetDialogResource<Texture>(specularMap, "SpecularMapDialog", "Open texture", "Image (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.pnj,.jpg,.jpeg,.bmp,.tga},.*");
+			}
+
+			if (emissiveMap)
+			{
+				{
+					ImGui::Text("Base Map: %s", emissiveMap->name.c_str());
+					Editor::ShowTexture(*emissiveMap, 32, 32);
+					Editor::GetDialogResource<Texture>(emissiveMap, "EmmisiveMapDialog", "Open texture", "Image (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.pnj,.jpg,.jpeg,.bmp,.tga},.*");
+				}
+			}
+
 			ImGui::ColorEdit3("Emissive Color", glm::value_ptr(emissiveColor));
 
 			ImGui::DragFloat("Shininess", &shininess, 1.0f, 2.0f, 256.0f);

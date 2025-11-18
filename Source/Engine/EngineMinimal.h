@@ -44,6 +44,7 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/Texture.h"
 #include "Renderer/TextureAnimation.h"
+#include "Renderer//RenderTexture.h"
 #include "Renderer/Cubemap.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Program.h"
@@ -55,6 +56,7 @@
 #include "Physics/Collidable.h"
 
 //Components
+#include "Components/RotationComponent.h"
 #include "Components/ModelRender.h"
 #include "Components/CameraComponent.h"
 #include "Components/LightComponent.h"

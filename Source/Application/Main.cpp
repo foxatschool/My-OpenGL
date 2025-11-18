@@ -8,7 +8,9 @@ int main(int argc, char* argv[])
     LOG_INFO("initialize engine...");
     neu::GetEngine().Initialize();
 
-
+    auto renderTexture = std::make_shared<neu::RenderTexture>();
+    renderTexture->Create(512, 512);
+    neu::Resources().AddResource("renderTexture", renderTexture);
     
     // initialize scene
     auto scene = std::make_unique<neu::Scene>();

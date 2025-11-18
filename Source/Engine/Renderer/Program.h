@@ -37,7 +37,10 @@ namespace neu
 	public:
 		GLuint m_program = 0;
 		std::map<std::string, GLint> m_uniformLocations;
+		
+		void UpdateGui() override {};
 	};
+
 }
 
 
