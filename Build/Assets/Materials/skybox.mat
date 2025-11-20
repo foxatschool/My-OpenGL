@@ -1,4 +1,4 @@
 {
 	"program": "shaders/skybox.prog",
-	"cubeMap": "textures/pond/posx.jpg textures/pond/negx.jpg textures/pond/posy.jpg textures/pond/negy.jpg textures/pond/posz.jpg textures/pond/negz.jpg"
+	"cubeMap": "textures/pond/posx.jpg textures/Pond/negx.jpg textures/Pond/posy.jpg textures/Pond/negy.jpg textures/Pond/posz.jpg textures/Pond/negz.jpg"
 }

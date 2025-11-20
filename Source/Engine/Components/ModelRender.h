@@ -8,7 +8,6 @@ namespace neu
 	public:
 		CLASS_PROTOTYPE(ModelRender);
 
-		//std::unique_ptr<Object> Clone() override;
 		void Update(float dt) override;
 		void Draw(Renderer& renderer) override;
 

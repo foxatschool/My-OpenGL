@@ -58,6 +58,7 @@
 //Components
 #include "Components/RotationComponent.h"
 #include "Components/ModelRender.h"
+#include "Components/PostProcessComponent.h"
 #include "Components/CameraComponent.h"
 #include "Components/LightComponent.h"
 #include "Components/FirstPersonController.h"

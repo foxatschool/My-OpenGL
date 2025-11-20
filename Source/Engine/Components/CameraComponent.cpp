@@ -37,6 +37,17 @@ namespace neu
 		if (!SERIAL_READ(value, aspect)) aspect = GetEngine().GetRenderer().GetWidth() / (float)GetEngine().GetRenderer().GetHeight();
 		SERIAL_READ(value, near);
 		SERIAL_READ(value, far);
+
+		SERIAL_READ(value, backgroundColor);
+		SERIAL_READ(value, clearColorBuffer);
+		SERIAL_READ(value, clearDepthBuffer);
+
+		std::string outputTextureName;
+		SERIAL_READ_NAME(value, "outputTexture", outputTextureName);
+		if (!outputTextureName.empty())
+		{
+			outputTexture = Resources().Get<RenderTexture>(outputTextureName);
+		}
 	}
 
 	void CameraComponent::UpdateGui()
@@ -45,7 +56,19 @@ namespace neu
 		ImGui::DragFloat("Aspect", &aspect, 0.1f);
 		ImGui::DragFloat("Near", &near, 0.1f);
 		ImGui::DragFloat("Far", &far, 0.1f);
+		
+		ImGui::ColorEdit3("Background", glm::value_ptr(backgroundColor));
+		ImGui::Checkbox("Clear Color", &clearColorBuffer);
+		ImGui::Checkbox("Clear Depth", &clearDepthBuffer);
 	}
 
+	void CameraComponent::Clear()
+	{
+		glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1);
+		GLbitfield bits = 0;
+		if (clearColorBuffer) bits |= GL_COLOR_BUFFER_BIT;
+		if (clearDepthBuffer) bits |= GL_DEPTH_BUFFER_BIT;
 
+		glClear(bits);
+	}
 }

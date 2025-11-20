@@ -1,9 +1,10 @@
 {
+  "post_process": false,
   "actors": [
     {
       "name": "Skybox",
       "persistent": true,
-      "active": false,
+      "active": true,
       "transform": {
         "position": [ 0, 0, 0 ],
         "rotation": [ 0, 0, 0 ],
@@ -32,7 +33,7 @@
       "components": [
         {
           "type": "ModelRender",
-          "model": "models/cube.obj",
+          "model": "models/spot.obj",
           "material": "materials/crate.mat"
         },
         {
@@ -53,8 +54,62 @@
         {
           "type": "ModelRender",
           "model": "models/cube.obj",
-          "material": "materials/crate.mat"
+          "material": "materials/reflection.mat"
 
+        }
+      ]
+    },
+    {
+      "name": "Window",
+      "persistent": true,
+      "transform": {
+        "position": [ 3, 0, 0 ],
+        "rotation": [ 0, 0, 0 ],
+        "scale": [ 1, 1, 1 ]
+      },
+      "components": [
+        {
+          "type": "ModelRender",
+          "model": "models/quad.obj",
+          "material": "materials/rtt.mat"
+
+        }
+      ]
+    },
+    {
+      "name": "postprocess",
+      "persistent": true,
+      "active": false,
+      "transform": {
+        "position": [ 0, 0, 0 ],
+        "rotation": [ 0, 0, 0 ],
+        "scale": [ 1, 1, 1 ]
+      },
+      "components": [
+        {
+          "type": "ModelRender",
+          "model": "models/quad.obj",
+          "material": "materials/postprocess.mat"
+
+        }
+      ]
+    },
+    {
+      "name": "camera_rtt",
+      "persistent": true,
+      "transform": {
+        "position": [ 0, 5, 5 ],
+        "rotation": [ 0, 0, 0 ],
+        "scale": [ 1, 1, 1 ]
+      },
+      "components": [
+        {
+          "type": "CameraComponent",
+          "outputTexture": "renderTexture"
+        },
+        {
+          "speed": 5,
+          "sensitivity": 0.2
         }
       ]
     },
@@ -68,7 +123,11 @@
       },
       "components": [
         {
-          "type": "CameraComponent"
+          "type": "CameraComponent",
+          "OutputTextuer": "postprocessTexture"
+        },
+        {
+          "type": "PostProcessComponenet"
         },
         {
           "type": "FirstPersonController",

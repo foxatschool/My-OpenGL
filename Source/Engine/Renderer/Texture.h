@@ -48,6 +48,6 @@ namespace neu {
 		// The dimensions of the texture in pixels
 		glm::ivec2 m_size{ 0, 0 };
 
-		void UpdateGui() override {};
+		void UpdateGui() override;
 	};
 }
